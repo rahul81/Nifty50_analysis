@@ -79,6 +79,7 @@ def get_insights():
     df.pct_change().mean().plot(figsize=(10,6),kind='bar')
     plt.xlabel("Stocks")
     plt.ylabel("Percentage Change")
+    plt.title("Simple returns")
     # plt.show()
 
 
@@ -86,6 +87,7 @@ def get_insights():
     #calculate and plot the log returns 
     rets = np.log(df/df.shift(1))
     rets[rets.columns[30:45]].cumsum().apply(np.exp).plot(figsize=(10,6))
+    plt.title("Log returns")
     # plt.show()
 
 
@@ -178,12 +180,19 @@ def get_correlation():
     plt.show()
 
 
+def correlated_stocks():
+    data = df[["ICICIBANK","EICHERMOT"]]
+    data["2017-01-01":'2019-01-01'].plot(secondary_y="EICHERMOT",figsize=(10,6))
+    plt.title("ICICIvsEICHER")
+    plt.show()
 
-get_insights()
-
-get_correlation()
 
 
+# get_insights()
+
+# get_correlation()
+
+correlated_stocks()
 
 
 
