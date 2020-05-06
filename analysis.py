@@ -108,8 +108,9 @@ def get_insights():
     #Simple moving average stratergy
     #Rolling statistics 
 
+    tick = "SHREECEM"
 
-    EM = df[:]['SHREECEM'].reset_index()
+    EM = df[:][tick].reset_index()
 
     EM.set_index('Date',inplace=True)
 
@@ -118,16 +119,16 @@ def get_insights():
 
     window = 30
 
-    EM['min'] = EM['SHREECEM'].rolling(window=window).min()
-    EM['max'] = EM['SHREECEM'].rolling(window=window).max()
-    EM['mean'] = EM['SHREECEM'].rolling(window=window).mean()
-    EM['std'] = EM['SHREECEM'].rolling(window=window).std()
-    EM['median'] = EM['SHREECEM'].rolling(window=window).median()
-    EM['ewma'] = EM['SHREECEM'].ewm(halflife=0.5,min_periods=window).mean()
+    #calculate mean,median,max,std_dev for the selected stock data
 
+    EM['min'] = EM[tick].rolling(window=window).min()
+    EM['max'] = EM[tick].rolling(window=window).max()
+    EM['mean'] = EM[tick].rolling(window=window).mean()
+    EM['std'] = EM[tick].rolling(window=window).std()
+    EM['median'] = EM[tick].rolling(window=window).median()
 
     ax = EM[['min','mean','max']].iloc[-750:-350].plot(figsize=(10,6), style=['g--','r--','g--'], lw=0.8)
-    EM['SHREECEM'].iloc[-750:-350].plot(ax=ax, lw=2)
+    EM[tick].iloc[-750:-350].plot(ax=ax, lw=2)
     plt.xlabel("Date")
     plt.ylabel("Price")
     plt.title("30 days max min simple moving average")
@@ -135,8 +136,8 @@ def get_insights():
 
     # moving average cross over
 
-    EM['SMA1'] = EM['SHREECEM'].rolling(window=52).mean()
-    EM['SMA2'] = EM['SHREECEM'].rolling(window=252).mean()
+    EM['SMA1'] = EM[tick].rolling(window=52).mean()
+    EM['SMA2'] = EM[tick].rolling(window=252).mean()
 
     EM.dropna(inplace=True)
 
@@ -145,7 +146,7 @@ def get_insights():
 
 
 
-    ax = EM[['SHREECEM','SMA1','SMA2','positions']].plot(figsize=(10,6), secondary_y='positions')
+    ax = EM[[tick,'SMA1','SMA2','positions']].plot(figsize=(10,6), secondary_y='positions')
     ax.get_legend().set_bbox_to_anchor((0.25, 0.85))
 
     plt.title('SMA cross over stratergy')
@@ -187,11 +188,14 @@ def correlated_stocks():
     plt.show()
 
 
-    
+
+#Function call to get the summary statistics of the data and plots
 get_insights()
 
+#Function call to plot the correlation among the 50 stocks
 get_correlation()
 
+#Function call to visualize example correlated stocks
 correlated_stocks()
 
 
