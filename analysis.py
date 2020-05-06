@@ -187,10 +187,10 @@ def correlated_stocks():
     plt.show()
 
 
+    
+get_insights()
 
-# get_insights()
-
-# get_correlation()
+get_correlation()
 
 correlated_stocks()
 
